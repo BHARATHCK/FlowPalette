@@ -1,58 +1,78 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { Container } from "@material-ui/core"
+import "./App.css"
+import Footer from "./components/Footer/Footer"
+import Header from "./components/header/Header"
+import { createTheme } from "@mui/material/styles"
+import { ThemeProvider } from "@emotion/react"
+import Countdown from "./components/Countdown/Countdown"
+import moment from "moment"
+import { useEffect, useState } from "react"
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#cc0052",
+    },
+    secondary: {
+      main: "#f44336",
+    },
+    third: {
+      main: "#cc0052",
+    },
+  },
+})
 
 function App() {
+  const initialCountdownTimer = {
+    days: "",
+    hours: "",
+    minutes: "",
+    seconds: "",
+  }
+
+  const [countdownTimer, setCountdownTimer] = useState({ ...initialCountdownTimer })
+
+  useEffect(() => {
+    setInterval(() => {
+      playTimer(1648665000)
+    }, 1000)
+  }, [])
+
+  function playTimer(currentUnixEndDate) {
+    const distance = currentUnixEndDate - moment().format("X")
+    if (distance > 0) {
+      setCountdownTimer((prevCountdownTimer) => {
+        return {
+          ...prevCountdownTimer,
+          days: parseInt(distance / (60 * 60 * 24), 10),
+          hours: parseInt((distance % (60 * 60 * 24)) / (60 * 60), 10),
+          mins: parseInt((distance % (60 * 60)) / 60, 10),
+          secs: parseInt(distance % 60, 10),
+        }
+      })
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+    <ThemeProvider theme={theme}>
+      <>
+        <Header />
+        <div className="centerContainer">
+          <Container maxWidth="lg">
+            <h1 className="introText">
+              Collaborate more <span className="pink">efficiently</span>
+            </h1>
+            <p className="descText">
+              An online platform for brainstorming ideas and building them with
+              complete control on workflow.
+            </p>
+          </Container>
+          <Countdown countdownTimer={countdownTimer} />
+        </div>
+        <Footer />
+      </>
+    </ThemeProvider>
+  )
 }
 
-export default App;
+export default App
