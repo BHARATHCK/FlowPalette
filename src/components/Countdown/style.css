@@ -1,0 +1,19 @@
+.card {
+  color: white;
+  border-radius: 10px;
+  width: 80px;
+  height: 80px;
+  justify-content: center;
+  background-color: #cc0052;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.countdown {
+  padding: 18px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
